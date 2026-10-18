@@ -45,6 +45,7 @@ import { bundleRoutes } from "./routes/bundles.js";
 import { restoreCheckRoutes } from "./routes/restore-check.js";
 import { crashCartRoutes } from "./routes/crash-cart.js";
 import { agentsRoutes } from "./routes/agents.js";
+import { t3IntegrationRoutes } from "./routes/t3-integration.js";
 import { psRoutes } from "./routes/ps.js";
 import type { PsProjectionService } from "./domain/ps-projection.js";
 import type { UpCommandRouter } from "./domain/up-command-router.js";
@@ -737,6 +738,7 @@ export function createApp(deps: AppDeps): Hono {
   app.get("/api/rigs/:rigId/spec.json", handleExportJson);
   app.route("/api/packages", packagesRoutes);
   app.route("/api/agents", agentsRoutes);
+  app.route("/api/integrations/t3", t3IntegrationRoutes(deps.rigRepo, { bearerToken: deps.terminalBearerToken ?? null }));
   app.route("/api/bootstrap", bootstrapRoutes);
   app.route("/api/discovery", discoveryRoutes);
   app.route("/api/bundles", bundleRoutes);

@@ -1,0 +1,70 @@
+# Adapted from OpenRig World's workshop template (Apache-2.0).
+# Phase 1: install the organizational topology without launching tmux runtimes.
+# Attach existing T3 browser sessions to seats through /api/integrations/t3.
+version: "0.2"
+name: omni-command
+summary: >
+  One global agent manager for all work, with project managers, domain experts,
+  delegated workers and optional hard-task reviewers. T3 owns agent sessions.
+culture_file: CULTURE.md
+docs:
+  - path: README.md
+pods:
+  - id: command
+    label: Global Command
+    summary: The only default user-facing manager; coordinates all projects.
+    members:
+      - { id: chief, label: Global Manager, agent_ref: "local:agents/omni-command", profile: global-manager, runtime: codex, cwd: "." }
+    edges: []
+  - id: projects
+    label: Project Managers
+    summary: Own project goals, allocation, cross-repository constraints and completion.
+    members:
+      - { id: wartribes, label: Wartribes Manager, agent_ref: "local:agents/omni-command", profile: project-manager, runtime: codex, cwd: "." }
+      - { id: omni, label: Omni Manager, agent_ref: "local:agents/omni-command", profile: project-manager, runtime: codex, cwd: "." }
+      - { id: altraea, label: Altraea Manager, agent_ref: "local:agents/omni-command", profile: project-manager, runtime: codex, cwd: "." }
+      - { id: citizen, label: Citizen Imperium Manager, agent_ref: "local:agents/omni-command", profile: project-manager, runtime: codex, cwd: "." }
+      - { id: cascadeur, label: Cascadeur Manager, agent_ref: "local:agents/omni-command", profile: project-manager, runtime: codex, cwd: "." }
+      - { id: t3, label: T3 Code Manager, agent_ref: "local:agents/omni-command", profile: project-manager, runtime: codex, cwd: "." }
+    edges: []
+  - id: experts
+    label: Domain Experts
+    summary: Deep technical knowledge and mentoring, authorized to delegate scoped work.
+    members:
+      - { id: gameplay, label: Gameplay Systems Expert, agent_ref: "local:agents/omni-command", profile: expert, runtime: codex, cwd: "." }
+      - { id: rendering, label: Unreal and Animation Expert, agent_ref: "local:agents/omni-command", profile: expert, runtime: codex, cwd: "." }
+      - { id: infrastructure, label: Omni Infrastructure Expert, agent_ref: "local:agents/omni-command", profile: expert, runtime: codex, cwd: "." }
+      - { id: ai, label: Agent Systems Expert, agent_ref: "local:agents/omni-command", profile: expert, runtime: codex, cwd: "." }
+    edges: []
+  - id: execution
+    label: Workers and Verification
+    summary: Specialist workers execute tasks. QA is routine; code review is selective.
+    members:
+      - { id: worker-a, label: Worker A, agent_ref: "local:agents/omni-command", profile: worker, runtime: codex, cwd: "." }
+      - { id: worker-b, label: Worker B, agent_ref: "local:agents/omni-command", profile: worker, runtime: codex, cwd: "." }
+      - { id: worker-c, label: Worker C, agent_ref: "local:agents/omni-command", profile: worker, runtime: codex, cwd: "." }
+      - { id: qa, label: QA and Build Verification, agent_ref: "local:agents/omni-command", profile: qa, runtime: codex, cwd: "." }
+      - { id: hard-review, label: Hard Task Reviewer, agent_ref: "local:agents/omni-command", profile: hard-review, runtime: codex, cwd: "." }
+    edges: []
+edges:
+  - { kind: delegates_to, from: command.chief, to: projects.wartribes }
+  - { kind: delegates_to, from: command.chief, to: projects.omni }
+  - { kind: delegates_to, from: command.chief, to: projects.altraea }
+  - { kind: delegates_to, from: command.chief, to: projects.citizen }
+  - { kind: delegates_to, from: command.chief, to: projects.cascadeur }
+  - { kind: delegates_to, from: command.chief, to: projects.t3 }
+  - { kind: delegates_to, from: projects.wartribes, to: experts.gameplay }
+  - { kind: delegates_to, from: projects.wartribes, to: experts.rendering }
+  - { kind: delegates_to, from: projects.citizen, to: experts.gameplay }
+  - { kind: delegates_to, from: projects.citizen, to: experts.rendering }
+  - { kind: delegates_to, from: projects.omni, to: experts.infrastructure }
+  - { kind: delegates_to, from: projects.omni, to: experts.ai }
+  - { kind: delegates_to, from: projects.t3, to: experts.ai }
+  - { kind: delegates_to, from: projects.altraea, to: experts.gameplay }
+  - { kind: delegates_to, from: projects.cascadeur, to: experts.rendering }
+  - { kind: delegates_to, from: experts.gameplay, to: execution.worker-a }
+  - { kind: delegates_to, from: experts.rendering, to: execution.worker-b }
+  - { kind: delegates_to, from: experts.infrastructure, to: execution.worker-c }
+  - { kind: delegates_to, from: experts.ai, to: execution.worker-c }
+  - { kind: can_observe, from: command.chief, to: execution.qa }
+  - { kind: can_observe, from: command.chief, to: execution.hard-review }

@@ -1,0 +1,30 @@
+name: omni-command
+version: "1.0"
+description: >
+  An Omni managed development organization adapted from the OpenRig World
+  Workshop public rig. T3 Code is the session controller.
+profiles:
+  global-manager:
+    summary: Owns every active cross-project objective and delegates through project managers.
+    preferences: { runtime: codex }
+    startup: { files: [{ path: "guidance/global-manager.md", delivery_hint: send_text, required: true }] }
+  project-manager:
+    summary: Coordinates one project, experts, and workers; reports to global manager.
+    preferences: { runtime: codex }
+    startup: { files: [{ path: "guidance/project-manager.md", delivery_hint: send_text, required: true }] }
+  expert:
+    summary: Deep domain expert, may delegate to workers and advise project managers.
+    preferences: { runtime: codex }
+    startup: { files: [{ path: "guidance/expert.md", delivery_hint: send_text, required: true }] }
+  worker:
+    summary: Executes assigned tasks in owned source areas with focused tests.
+    preferences: { runtime: codex }
+    startup: { files: [{ path: "guidance/worker.md", delivery_hint: send_text, required: true }] }
+  qa:
+    summary: Runs relevant tests and reports objective evidence, not obligatory code review.
+    preferences: { runtime: codex }
+    startup: { files: [{ path: "guidance/qa.md", delivery_hint: send_text, required: true }] }
+  hard-review:
+    summary: Reviews only when a manager requests a hard or high-risk review.
+    preferences: { runtime: codex }
+    startup: { files: [{ path: "guidance/hard-review.md", delivery_hint: send_text, required: true }] }
